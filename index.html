@@ -125,6 +125,16 @@
       opacity: 1;
     }
 
+    .timer-button.reset:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      background: rgba(52, 152, 219, 0.1);
+    }
+
+    .timer-button.reset:disabled:hover {
+      opacity: 0.3;
+    }
+
     h1 {
       font-size: clamp(1.5rem, 5vw, 2.5rem);
       margin-bottom: 2rem;
@@ -298,7 +308,7 @@
       <div class="timer-controls">
         <button class="timer-button start" id="startTimer">スタート</button>
         <button class="timer-button stop" id="stopTimer">ストップ</button>
-        <button class="timer-button reset" id="resetTimer">リセット</button>
+        <button class="timer-button reset" id="resetTimer" disabled>リセット</button>
       </div>
     </div>
   </div>
@@ -356,6 +366,10 @@
     let timerInterval;
     let isRunning = false;
 
+    function updateResetButton() {
+      resetButton.disabled = isRunning;
+    }
+
     function formatTime(ms) {
       const minutes = Math.floor(ms / 60000);
       const seconds = Math.floor((ms % 60000) / 1000);
@@ -376,6 +390,7 @@
         timerInterval = setInterval(updateTimer, 100);
         startButton.style.opacity = '0.5';
         stopButton.style.opacity = '1';
+        updateResetButton();
       }
     });
 
@@ -385,17 +400,39 @@
         clearInterval(timerInterval);
         startButton.style.opacity = '1';
         stopButton.style.opacity = '0.5';
+        updateResetButton();
+
+        // 振動させる
+        try {
+          // 長めの振動（500ミリ秒）
+          if (navigator.vibrate) {
+            navigator.vibrate(500);
+          }
+          // iOS向けの振動対応
+          if (window.Notification && Notification.permission === "granted") {
+            // iOSでは通知許可があれば振動する
+            new Notification("タイマー停止");
+          }
+        } catch (error) {
+          console.log('振動APIが利用できません:', error);
+        }
       }
     });
 
     resetButton.addEventListener('click', () => {
-      isRunning = false;
-      clearInterval(timerInterval);
-      elapsedTime = 0;
-      timerDisplay.textContent = '00:00.0';
-      startButton.style.opacity = '1';
-      stopButton.style.opacity = '1';
+      if (!isRunning) {
+        isRunning = false;
+        clearInterval(timerInterval);
+        elapsedTime = 0;
+        timerDisplay.textContent = '00:00.0';
+        startButton.style.opacity = '1';
+        stopButton.style.opacity = '1';
+        updateResetButton();
+      }
     });
+
+    // 初期状態でリセットボタンを無効化
+    updateResetButton();
   </script>
 </body>
 </html>
