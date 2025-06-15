@@ -153,6 +153,56 @@
       opacity: 0.8;
     }
 
+    .volume-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 0 1rem;
+    }
+
+    .volume-icon {
+      font-size: 1.2rem;
+    }
+
+    .volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 150px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .volume-slider::-webkit-slider-thumb:hover,
+    .volume-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
     @media (max-width: 480px) {
       .container {
         padding: 1rem;
@@ -202,6 +252,9 @@
     const audio = document.getElementById('whistleAudio');
     const btn = document.getElementById('whistleButton');
     const status = document.getElementById('status');
+
+    // 音量を最大に設定
+    audio.volume = 1.0;
 
     function createRipple(event) {
       const button = event.currentTarget;
