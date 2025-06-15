@@ -36,6 +36,59 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .section {
+      width: 100%;
+    }
+
+    .timer-display {
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-family: monospace;
+      margin: 1rem 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .timer-button {
+      padding: 0.8rem 1.5rem;
+      border: 2px solid white;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .timer-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .timer-button:active {
+      transform: scale(0.95);
+    }
+
+    .timer-button.start {
+      background: rgba(39, 174, 96, 0.2);
+    }
+
+    .timer-button.stop {
+      background: rgba(231, 76, 60, 0.2);
+    }
+
+    .timer-button.reset {
+      background: rgba(52, 152, 219, 0.2);
     }
 
     h1 {
@@ -62,7 +115,7 @@
     }
 
     .whistle-button::before {
-      content: '🎵';
+      content: '📢';
       font-size: clamp(2rem, 8vw, 4rem);
       position: absolute;
       top: 50%;
@@ -113,15 +166,36 @@
       .status {
         margin-top: 1.5rem;
       }
+
+      .timer-controls {
+        flex-wrap: wrap;
+      }
+
+      .timer-button {
+        flex: 1 1 auto;
+        min-width: 100px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Whistle App</h1>
-    <audio id="whistleAudio" src="whistle.mp3" preload="auto"></audio>
-    <button class="whistle-button" id="whistleButton"></button>
-    <div class="status" id="status">タップしてホイッスルを鳴らす</div>
+    <h1>Whistle & Timer</h1>
+    
+    <div class="section">
+      <audio id="whistleAudio" src="whistle.mp3" preload="auto"></audio>
+      <button class="whistle-button" id="whistleButton"></button>
+      <div class="status" id="status">タップしてホイッスルを鳴らす</div>
+    </div>
+
+    <div class="section">
+      <div class="timer-display" id="timerDisplay">00:00.0</div>
+      <div class="timer-controls">
+        <button class="timer-button start" id="startTimer">スタート</button>
+        <button class="timer-button stop" id="stopTimer">ストップ</button>
+        <button class="timer-button reset" id="resetTimer">リセット</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -162,6 +236,57 @@
         console.error('再生エラー:', err);
         status.textContent = 'エラーが発生しました';
       });
+    });
+
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startButton = document.getElementById('startTimer');
+    const stopButton = document.getElementById('stopTimer');
+    const resetButton = document.getElementById('resetTimer');
+
+    let startTime;
+    let elapsedTime = 0;
+    let timerInterval;
+    let isRunning = false;
+
+    function formatTime(ms) {
+      const minutes = Math.floor(ms / 60000);
+      const seconds = Math.floor((ms % 60000) / 1000);
+      const tenths = Math.floor((ms % 1000) / 100);
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`;
+    }
+
+    function updateTimer() {
+      const currentTime = Date.now();
+      elapsedTime = currentTime - startTime;
+      timerDisplay.textContent = formatTime(elapsedTime);
+    }
+
+    startButton.addEventListener('click', () => {
+      if (!isRunning) {
+        isRunning = true;
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTimer, 100);
+        startButton.style.opacity = '0.5';
+        stopButton.style.opacity = '1';
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      if (isRunning) {
+        isRunning = false;
+        clearInterval(timerInterval);
+        startButton.style.opacity = '1';
+        stopButton.style.opacity = '0.5';
+      }
+    });
+
+    resetButton.addEventListener('click', () => {
+      isRunning = false;
+      clearInterval(timerInterval);
+      elapsedTime = 0;
+      timerDisplay.textContent = '00:00.0';
+      startButton.style.opacity = '1';
+      stopButton.style.opacity = '1';
     });
   </script>
 </body>
