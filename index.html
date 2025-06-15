@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#1a2a6c">
-  <title>ホイッスルアプリ（mp3版）</title>
+  <title>TUSフットサル大会</title>
   <style>
     * {
       margin: 0;
@@ -52,6 +52,21 @@
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     }
 
+    .match-info {
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      opacity: 0.8;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    .match-info span {
+      display: block;
+      margin: 0.2rem 0;
+    }
+
     .timer-controls {
       display: flex;
       gap: 1rem;
@@ -81,14 +96,33 @@
 
     .timer-button.start {
       background: rgba(39, 174, 96, 0.2);
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
+      padding: 1rem 2rem;
+      font-weight: bold;
     }
 
     .timer-button.stop {
       background: rgba(231, 76, 60, 0.2);
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      padding: 0.6rem 1rem;
+      opacity: 0.7;
+      transform: scale(0.85);
+    }
+
+    .timer-button.stop:hover {
+      opacity: 1;
     }
 
     .timer-button.reset {
       background: rgba(52, 152, 219, 0.2);
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      padding: 0.6rem 1rem;
+      opacity: 0.7;
+      transform: scale(0.85);
+    }
+
+    .timer-button.reset:hover {
+      opacity: 1;
     }
 
     h1 {
@@ -219,18 +253,35 @@
 
       .timer-controls {
         flex-wrap: wrap;
+        gap: 0.8rem;
+        justify-content: center;
       }
 
       .timer-button {
-        flex: 1 1 auto;
-        min-width: 100px;
+        flex: 0 1 auto;
+        min-width: 80px;
+      }
+
+      .timer-button.start {
+        flex: 1 1 100%;
+        order: 1;
+      }
+
+      .timer-button.stop {
+        order: 2;
+        margin-top: 0.5rem;
+      }
+
+      .timer-button.reset {
+        order: 3;
+        margin-top: 0.5rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Whistle & Timer</h1>
+    <h1>TUSフットサル大会</h1>
     
     <div class="section">
       <audio id="whistleAudio" src="whistle.mp3" preload="auto"></audio>
@@ -240,6 +291,10 @@
 
     <div class="section">
       <div class="timer-display" id="timerDisplay">00:00.0</div>
+      <div class="match-info">
+        <span>⚽ リーグ戦: 7分</span>
+        <span>🏆 トーナメント: 5分</span>
+      </div>
       <div class="timer-controls">
         <button class="timer-button start" id="startTimer">スタート</button>
         <button class="timer-button stop" id="stopTimer">ストップ</button>
