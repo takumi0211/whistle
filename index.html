@@ -28,9 +28,9 @@
 
     .container {
       text-align: center;
-      padding: 1.5rem;
-      width: 90%;
-      max-width: 500px;
+      padding: 1rem;
+      width: 85%;
+      max-width: 450px;
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -38,40 +38,159 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .scoreboard {
+      display: flex;
+      justify-content: center;
       gap: 2rem;
+      margin: 0.5rem 0;
+    }
+
+    .team-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .team-name {
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .score-display {
+      font-size: clamp(2rem, 6vw, 2.5rem);
+      font-family: monospace;
+      font-weight: bold;
+      min-width: 3ch;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .score-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .score-button {
+      width: 30px;
+      height: 30px;
+      border: 2px solid white;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .score-button:active {
+      transform: scale(0.95);
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 2px;
     }
 
     .section {
       width: 100%;
     }
 
+    .whistle-button {
+      position: relative;
+      width: min(180px, 55vw);
+      height: min(180px, 55vw);
+      border-radius: 50%;
+      background: transparent;
+      border: 3px solid white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      margin: 0 auto;
+    }
+
+    .whistle-button::before {
+      content: '📢';
+      font-size: clamp(2rem, 8vw, 4rem);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .whistle-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .whistle-button:active {
+      transform: scale(0.95);
+    }
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.8s linear;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
     .timer-display {
-      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-size: clamp(1.8rem, 7vw, 3rem);
       font-family: monospace;
-      margin: 1rem 0;
+      margin: 0.5rem 0;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .match-info {
       font-size: clamp(0.9rem, 3vw, 1rem);
       opacity: 0.8;
-      margin: 0.5rem 0;
-      padding: 0.5rem;
+      margin: 0.3rem 0;
+      padding: 0.4rem 0.8rem;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      display: inline-block;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .match-info span {
-      display: block;
-      margin: 0.2rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .timer-controls {
       display: flex;
-      gap: 1rem;
+      gap: 0.8rem;
       justify-content: center;
-      margin-top: 1rem;
+      margin-top: 0.5rem;
     }
 
     .timer-button {
@@ -135,65 +254,23 @@
       opacity: 0.3;
     }
 
-    h1 {
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      margin-bottom: 2rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      letter-spacing: 2px;
-    }
-
-    .whistle-button {
-      position: relative;
-      width: min(200px, 60vw);
-      height: min(200px, 60vw);
-      border-radius: 50%;
-      background: transparent;
-      border: 3px solid white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      overflow: hidden;
-      touch-action: manipulation;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    .whistle-button::before {
-      content: '📢';
-      font-size: clamp(2rem, 8vw, 4rem);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .whistle-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-    }
-
-    .whistle-button:active {
-      transform: scale(0.95);
-    }
-
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      transform: scale(0);
-      animation: ripple 0.8s linear;
-    }
-
-    @keyframes ripple {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-
     .status {
-      margin-top: 2rem;
-      font-size: clamp(1rem, 4vw, 1.2rem);
+      margin-top: 1rem;
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      opacity: 0.8;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-style: italic;
+    }
+
+    .footer:hover {
       opacity: 0.8;
     }
 
@@ -292,6 +369,26 @@
 <body>
   <div class="container">
     <h1>TUSフットサル大会</h1>
+
+    <div class="scoreboard">
+      <div class="team-score">
+        <div class="team-name">Team A</div>
+        <div class="score-display" id="scoreA">0</div>
+        <div class="score-controls">
+          <button class="score-button" onclick="updateScore('A', -1)">-</button>
+          <button class="score-button" onclick="updateScore('A', 1)">+</button>
+        </div>
+      </div>
+
+      <div class="team-score">
+        <div class="team-name">Team B</div>
+        <div class="score-display" id="scoreB">0</div>
+        <div class="score-controls">
+          <button class="score-button" onclick="updateScore('B', -1)">-</button>
+          <button class="score-button" onclick="updateScore('B', 1)">+</button>
+        </div>
+      </div>
+    </div>
     
     <div class="section">
       <audio id="whistleAudio" src="whistle.mp3" preload="auto"></audio>
@@ -311,6 +408,10 @@
         <button class="timer-button reset" id="resetTimer" disabled>リセット</button>
       </div>
     </div>
+  </div>
+
+  <div class="footer">
+    Created by Takumi Shioda
   </div>
 
   <script>
@@ -433,6 +534,20 @@
 
     // 初期状態でリセットボタンを無効化
     updateResetButton();
+
+    // スコア管理
+    let scores = {
+      A: 0,
+      B: 0
+    };
+
+    function updateScore(team, change) {
+      const newScore = scores[team] + change;
+      if (newScore >= 0) {  // スコアが0未満にならないように
+        scores[team] = newScore;
+        document.getElementById(`score${team}`).textContent = newScore;
+      }
+    }
   </script>
 </body>
 </html>
