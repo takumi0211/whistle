@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a2a6c">
+  <title>ホイッスルアプリ（mp3版）</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      color: white;
+      padding: 1rem;
+      touch-action: manipulation;
+    }
+
+    .container {
+      text-align: center;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 2px;
+    }
+
+    .whistle-button {
+      position: relative;
+      width: min(200px, 60vw);
+      height: min(200px, 60vw);
+      border-radius: 50%;
+      background: transparent;
+      border: 3px solid white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .whistle-button::before {
+      content: '🎵';
+      font-size: clamp(2rem, 8vw, 4rem);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .whistle-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .whistle-button:active {
+      transform: scale(0.95);
+    }
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.8s linear;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .status {
+      margin-top: 2rem;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      opacity: 0.8;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .whistle-button {
+        width: 140px;
+        height: 140px;
+      }
+
+      .status {
+        margin-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Whistle App</h1>
+    <audio id="whistleAudio" src="whistle.mp3" preload="auto"></audio>
+    <button class="whistle-button" id="whistleButton"></button>
+    <div class="status" id="status">タップしてホイッスルを鳴らす</div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('whistleAudio');
+    const btn = document.getElementById('whistleButton');
+    const status = document.getElementById('status');
+
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const ripple = document.createElement('span');
+      const rect = button.getBoundingClientRect();
+      
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+      
+      ripple.style.width = ripple.style.height = `${diameter}px`;
+      ripple.style.left = `${event.clientX - rect.left - radius}px`;
+      ripple.style.top = `${event.clientY - rect.top - radius}px`;
+      ripple.className = 'ripple';
+
+      const rippleContainer = button.getElementsByClassName('ripple')[0];
+      if (rippleContainer) {
+        rippleContainer.remove();
+      }
+
+      button.appendChild(ripple);
+    }
+
+    btn.addEventListener('click', (e) => {
+      createRipple(e);
+      audio.currentTime = 0;
+      audio.play().then(() => {
+        status.textContent = 'ホイッスルを鳴らしています...';
+        setTimeout(() => {
+          status.textContent = 'タップしてホイッスルを鳴らす';
+        }, 1000);
+      }).catch(err => {
+        console.error('再生エラー:', err);
+        status.textContent = 'エラーが発生しました';
+      });
+    });
+  </script>
+</body>
+</html>
